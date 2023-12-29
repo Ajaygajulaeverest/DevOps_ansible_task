@@ -1,0 +1,13 @@
+s3_bucket:
+        name: my-everest-test-bucket
+        state: present
+        region: ap-south-1
+        versioning: no
+        tags:
+          name: my-everest-test-bucket
+    - name: put a object
+      aws_s3:
+        bucket: my-everest-test-bucket
+        object: "test.txt"
+        src: ./test.txt
+        mode: put

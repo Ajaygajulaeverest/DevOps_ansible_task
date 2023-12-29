@@ -1,0 +1,8 @@
+- name: ansible dwld 
+  hosts: localhost
+  tasks:
+    - name: Download fimg.img
+      ansible.builtin.get_url:
+        url: ""
+        dest: /Users/ajaygajula/Documents/ansible/Geturl
+        mode: "0440"

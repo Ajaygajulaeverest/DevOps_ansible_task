@@ -1,0 +1,10 @@
+- name: Terminate every running instance in a region. Use with EXTREME caution.
+  hosts: localhost
+  tasks:
+    - ec2_instance:
+        aws_access_key: AKIAYZ4ROK5JX6A4YH2K
+        aws_secret_key: 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
+        region: ap-south-1
+        state: absent
+        filters:
+          instance-state-name: running

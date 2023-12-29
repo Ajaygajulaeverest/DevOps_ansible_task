@@ -1,0 +1,26 @@
+# - name: testing
+#   hosts: myhosts
+#   tasks:
+#     - name: Ping my hosts
+#       ansible.builtin.ping:
+
+#     - name: Print message
+#       ansible.builtin.command: echo hello world
+
+# - name: Copyfile
+#   hosts: myhosts
+#   tasks:
+#     - name: copy file
+#       copy:
+#         src: inventory.yml
+#         dest: inventorycopy.yml
+
+#     - name: content
+#       ansible.builtin.command: cat sample.txt
+#       register: mymotd
+
+
+#Lauch Basic EC@2 instance in mumbai region.
+
+
+                

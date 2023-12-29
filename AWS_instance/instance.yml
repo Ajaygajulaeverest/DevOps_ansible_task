@@ -1,0 +1,32 @@
+- name: EC2 instance creation
+  hosts: localhost
+  tasks:
+    - ec2_instance:
+        aws_access_key: AKIAYZ4ROK5JX6A4YH2K
+        aws_secret_key: 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
+        name: Security_default
+        region: ap-south-1
+        instance_type: t2.micro
+        image_id: ami-03f4878755434977f
+        count: 1
+        wait: yes
+        tags:
+          name: instance_for_learning_EC2_module
+        network:
+          assign_public_ip: true
+        key_name: getservice
+        security_group: default
+
+        
+# - name: Ansible Play
+#   hosts: localhost
+#   tasks:
+#     - name: launching AWS instance using Ansible
+
+#       ec2_instance:
+#         key_name: getservice
+#         region: ap-south-1
+#         instance_type: t2.micro
+#         image: ami-03f4878755434977f
+#         instance_tags:
+#           Name: Ansible

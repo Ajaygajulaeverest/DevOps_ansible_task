@@ -1,0 +1,15 @@
+- name: Create RDS instance
+  hosts: localhost
+  tasks:
+    - name: Ensure RDS instance exists
+      amazon.aws.rds_instance:
+        aws_access_key: AKIAYZ4ROK5JX6A4YH2K
+        aws_secret_key: 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
+        engine: mysql
+        id: ansible-mysql-db-2
+        allocated_storage: 20
+        db_instance_class: db.t2.micro
+        username: ajay
+        password: ajay12345
+        region: ap-south-1
+        state: present
