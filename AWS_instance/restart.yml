@@ -2,8 +2,6 @@
   hosts: localhost
   tasks:
     - ec2_instance:
-        aws_access_key: AKIAYZ4ROK5JX6A4YH2K
-        aws_secret_key: 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
         region: ap-south-1
         state: stopped
         filters:

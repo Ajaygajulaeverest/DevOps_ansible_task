@@ -3,42 +3,42 @@
   become: yes
 
   tasks:
-    # - name: Update apt packages
-    #   apt:
-    #     update_cache: yes
+    - name: Update apt packages
+      apt:
+        update_cache: yes
 
-    # - name: Install required packages
-    #   apt:
-    #     name:
-    #       - docker.io
-    #       - python3-pip
-    #     state: present
+    - name: Install required packages
+      apt:
+        name:
+          - docker.io
+          - python3-pip
+        state: present
 
-    # - name: Start Docker service
-    #   service:
-    #     name: docker
-    #     state: started
-    #     enabled: yes
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
 
-    # - name: Install Docker Python library
-    #   pip:
-    #     name: docker
-    #     state: present
-    # - name: Pull Docker image
-    #   docker_image:
-    #     name: nginix
-    #     tag: latest
-    #     source: pull
+    - name: Install Docker Python library
+      pip:
+        name: docker
+        state: present
+    - name: Pull Docker image
+      docker_image:
+        name: nginx
+        tag: latest
+        source: pull
     - name: Run Docker container
       docker_container:
-        name: nginix-container
+        name: nginx-container
         image: nginx
-        state: stopped
-    # - name: Get Docker container status
-    #   docker_container_info:
-    #     name: hello-world-container
-    #   register: container_info
+        state: started
+    - name: Get Docker container status
+      docker_container_info:
+        name: nginx-container
+      register: container_info
 
-    # - name: Display Docker container status
-    #   debug:
-    #     var: container_info
+    - name: Display Docker container status
+      debug:
+        var: container_info

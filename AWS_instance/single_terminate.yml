@@ -5,5 +5,5 @@
         aws_access_key: AKIAYZ4ROK5JX6A4YH2K
         aws_secret_key: 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
         region: ap-south-1
-        instance_ids: 	i-0dac8ce54d31e6aa3
+        instance_ids: i-08d74887425a86c99
         state: absent

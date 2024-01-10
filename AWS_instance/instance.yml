@@ -1,10 +1,11 @@
 - name: EC2 instance creation
   hosts: localhost
   tasks:
-    - ec2_instance:
+    - name: create instance
+      ec2_instance:
         aws_access_key: AKIAYZ4ROK5JX6A4YH2K
         aws_secret_key: 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
-        name: Security_default
+        name: Anisble Docker App
         region: ap-south-1
         instance_type: t2.micro
         image_id: ami-03f4878755434977f
@@ -16,17 +17,124 @@
           assign_public_ip: true
         key_name: getservice
         security_group: default
+      register: instance_info
 
-        
-# - name: Ansible Play
-#   hosts: localhost
-#   tasks:
-#     - name: launching AWS instance using Ansible
+    - name: print info
+      debug:
+        msg: "{{instance_info.instances[0].network_interfaces[0].association.public_ip}}"
 
-#       ec2_instance:
-#         key_name: getservice
-#         region: ap-south-1
-#         instance_type: t2.micro
-#         image: ami-03f4878755434977f
-#         instance_tags:
-#           Name: Ansible
+    - name: Create SSH Group
+      add_host:
+          hostname: '{{instance_info.instances[0].network_interfaces[0].association.public_ip}}'
+          ansible_user: ubuntu
+          ansible_ssh_private_key_file: "~/getservice.pem"
+          groupname: ec2_access_group
+      with_items: instance_info.instances
+    - name: Wait for SSH
+      wait_for:
+        host: '{{instance_info.instances[0].network_interfaces[0].association.public_ip}}'
+        port: 22
+        state: started
+      with_items: instance_info.instances
+    # - name: Create SSH Group
+    #     add_host:
+    #         hostname: '{{instance_info.instances[0].network_interfaces[0].association.public_ip}}'
+    #         ansible_user: ubuntu
+    #         ansible_ssh_private_key_file: "~/Downloads/ansible-server.pem"
+    #         groupname: ec2_access_group
+    #     with_items: instance_info.instances
+    #   - name: Wait for SSH
+    #     wait_for:
+    #       host: 
+    #       port: 22
+    #       state: started
+    #     with_items: instance_info.instances
+    
+- name: Install Docker and run a container on Ubuntu EC2
+  hosts: ec2_access_group
+  become: yes
+  tasks:
+        - name: Update apt packages
+          apt:
+            update_cache: yes
+
+        - name: Install required packages
+          apt:
+            name:
+              - docker.io
+              - python3-pip
+            state: present
+
+        - name: Start Docker service
+          service:
+            name: docker
+            state: started
+            enabled: yes
+
+        - name: Install Docker Python library
+          pip:
+            name: docker
+            state: present
+        - name: Pull Docker image
+          docker_image:
+            name: nginx
+            tag: latest
+            source: pull
+        - name: Run Docker container
+          docker_container:
+            name: nginx-container
+            image: nginx
+            state: started
+        - name: Get Docker container status
+          docker_container_info:
+            name: nginx-container
+          register: container_info
+
+        - name: Display Docker container status
+          debug:
+            var: container_info
+      
+
+
+
+      # tasks:
+      #   - name: Update apt packages
+      #     apt:
+      #       update_cache: yes
+
+      #   - name: Install required packages
+      #     apt:
+      #       name:
+      #         - docker.io
+      #         - python3-pip
+      #       state: present
+
+      #   - name: Start Docker service
+      #     service:
+      #       name: docker
+      #       state: started
+      #       enabled: yes
+
+      #   - name: Install Docker Python library
+      #     pip:
+      #       name: docker
+      #       state: present
+      #   - name: Pull Docker image
+      #     docker_image:
+      #       name: nginx
+      #       tag: latest
+      #       source: pull
+      #   - name: Run Docker container
+      #     docker_container:
+      #       name: nginx-container
+      #       image: nginx
+      #       state: started
+      #   - name: Get Docker container status
+      #     docker_container_info:
+      #       name: nginx-container
+      #     register: container_info
+
+      #   - name: Display Docker container status
+      #     debug:
+      #       var: container_info
+
